@@ -17,7 +17,18 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
+
 db.students = require("../models/student.models")(sequelize, Sequelize);
 db.classes = require("../models/class.models")(sequelize, Sequelize);
 
+db.classes.hasMany(db.students, {
+  foreignKey: 'id_class'
+})
+
+db.students.belongsTo(db.classes, {
+  foreignKey: 'id_class',
+  targetKey: 'id_class'
+});
+
+sequelize.sync();
 module.exports = db;

@@ -1,27 +1,24 @@
-// const db = require('../models/models');
 
 const db = require("../database_configs/connectDB");
-
-// const Pool = require('pg').Pool
-// const pool = new Pool({
-//     user: 'root',
-//     host: 'localhost',
-//     database: 'webth',
-//     password: '',
-//     port: 8080
-// })
 
 module.exports = {
     getAllStudents: async (req, res) => {
         try {
             let data = await db.students.findAll({
-                raw: true
+                raw: true,
+                include: [
+                    {
+                        model: db.classes,
+                        attributes: ['name'],
+                    }
+                ]
             })
             return res.status(200).json({
                 msg: 'get all student successfully',
                 data
             })
         } catch(err) {
+            console.log(err)
             return res.status(500).json("lỗi server")
         }
     },
@@ -32,7 +29,13 @@ module.exports = {
                 raw: true,
                 where: {
                     id
-                }
+                },
+                include: [
+                    {
+                        model: db.classes,
+                        attributes: ['name'],
+                    }
+                ]
             })
             if (data) {
                 return res.status(200).json({
@@ -50,13 +53,18 @@ module.exports = {
         }
     },
     createStudent: async (req, res) => {
+        let id = req.body.id;
+        let name = req.body.name;
+        let birth = req.body.birth;
+        let gender = req.body.gender;
+        let id_class = req.body.id_class;
         try {
             if (
-                !req.body.id
-                || !req.body.name
-                || !req.body.birth
-                || !req.body.gender
-                || !req.body.id_class
+                !id
+                || !name
+                || !birth
+                || !gender
+                || !id_class
             ) {
                 res.status(400).send({
                     status: false,
@@ -64,6 +72,14 @@ module.exports = {
                 });
             }
             else {
+                let check = await db.students.findOne({
+                    where: {
+                        id
+                    }
+                })
+                if (check) {
+                    return res.status(409).json("Đã có sinh viên có id này!!")
+                }
                 db.students.create({
                     id: req.body.id,
                     name: req.body.name,
