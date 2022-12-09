@@ -1,5 +1,5 @@
 const express = require('express');
-const route = require("./routes/index");
+const route = require("./routes/route");
 var bodyParser = require('body-parser');
 
 const app = express();
@@ -14,5 +14,5 @@ route(app);
 
 const PORT = 8080;
 app.listen(PORT, () => {
-    console.log(`Server running at http://localhost:${PORT}/`);
+    console.log(`Server running on port ${PORT}`);
 });

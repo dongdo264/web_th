@@ -28,7 +28,7 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `classes` (
-  `malop` varchar(255) NOT NULL,
+  `id_class` varchar(255) NOT NULL,
   `name` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -36,7 +36,7 @@ CREATE TABLE `classes` (
 -- Đang đổ dữ liệu cho bảng `classes`
 --
 
-INSERT INTO `classes` (`malop`, `name`) VALUES
+INSERT INTO `classes` (`id_class`, `name`) VALUES
 ('INT3306', 'Phát triển ứng dụng web'),
 ('MAT1010', 'Xác suất thống kê');
 
@@ -49,19 +49,19 @@ INSERT INTO `classes` (`malop`, `name`) VALUES
 CREATE TABLE `students` (
   `id` varchar(255) NOT NULL,
   `name` varchar(255) NOT NULL,
-  `dob` varchar(255) NOT NULL,
-  `gioitinh` varchar(255) DEFAULT 'Male',
-  `malop` varchar(255) DEFAULT NULL
+  `birth` varchar(255) NOT NULL,
+  `gender` varchar(255) DEFAULT 'Male',
+  `id_class` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Đang đổ dữ liệu cho bảng `students`
 --
 
-INSERT INTO `students` (`id`, `name`, `dob`, `gioitinh`, `malop`) VALUES
-('20020000', 'Nguyễn Văn A', '20/02/2002', 'Nam', NULL),
-('20020001', 'Nguyễn Thị B', '20/02/2002', 'Nữ', NULL),
-('20020393', 'Đỗ Công Đồng', '26/04/2002', 'Nam', NULL);
+INSERT INTO `students` (`id`, `name`, `birth`, `gender`, `id_class`) VALUES
+('20020000', 'Nguyễn Văn A', '20/02/2002', 'Nam', 'INT3306'),
+('20020001', 'Nguyễn Thị B', '20/02/2002', 'Nữ', 'MAT1010'),
+('20020393', 'Đỗ Công Đồng', '26/04/2002', 'Nam', 'INT3306');
 
 --
 -- Chỉ mục cho các bảng đã đổ
@@ -71,14 +71,14 @@ INSERT INTO `students` (`id`, `name`, `dob`, `gioitinh`, `malop`) VALUES
 -- Chỉ mục cho bảng `classes`
 --
 ALTER TABLE `classes`
-  ADD PRIMARY KEY (`malop`);
+  ADD PRIMARY KEY (`id_class`);
 
 --
 -- Chỉ mục cho bảng `students`
 --
 ALTER TABLE `students`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `malop` (`malop`);
+  ADD KEY `id_class` (`id_class`);
 
 --
 -- Các ràng buộc cho các bảng đã đổ
@@ -88,7 +88,7 @@ ALTER TABLE `students`
 -- Các ràng buộc cho bảng `students`
 --
 ALTER TABLE `students`
-  ADD CONSTRAINT `students_ibfk_1` FOREIGN KEY (`malop`) REFERENCES `classes` (`malop`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `students_ibfk_1` FOREIGN KEY (`id_class`) REFERENCES `classes` (`id_class`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
